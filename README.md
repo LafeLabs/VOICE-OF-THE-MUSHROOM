@@ -1,5 +1,7 @@
 ## [qrcode.html](qrcode.html)
 
+## [HOME](index.html)
+
 ![qrcode.png](qrcode.png)
 
 # [VOICE OF THE MUSHROOM](https://github.com/LafeLabs/VOICE-OF-THE-MUSHROOM)
@@ -7,6 +9,11 @@
 # [GITHUB REPLICATOR SCROLL](https://github.com/LafeLabs/VOICE-OF-THE-MUSHROOM)
 
 # [LOCALHOST README EDITOR](http://localhost/VOICE-OF-THE-MUSHROOM/edit-readme.html)
+
+## [16 bit ADC](https://www.adafruit.com/product/1085)
+## [spike signal paper](https://www.nature.com/articles/s41598-018-26007-1)
+## [language of mushrooms paper](https://royalsocietypublishing.org/rsos/article/9/4/211926/96736/Language-of-fungi-derived-from-their-electrical)
+## [SETI@HOME, the inspiration for the global dirtscope](https://setiathome.berkeley.edu/)
 
 MICROCONTROLLER PROBE OF VOLTAGE IN THE MYCELIUM!
 
@@ -40,9 +47,26 @@ IT IS ALSO AGNOSTIC ABOUT THE OPERATING SYSTEM OF THE TRASH MAGIC SERVER!
 
 IT CAN RUN ON WINDOWS, LINUX, AND MACOS! ALL IT NEEDS IS A WEB SERVER WITH PHP, PYTHON, AND SOME KIND OF MICROCONTROLLER SOFTWARE LIKE ARDUINO OR MU FOR CIRCUIT PYTYHON!
 
+## [voice.ino](voice/voice.ino)
+
+```
+int voltage = 0;   //value of A0
+  
+void setup() {
+   Serial.begin(9600);
+}
+  
+void loop() {
+  voltage = analogRead(A0);
+  Serial.println(voltage);
+  delay(10);
+}
+```
+
 FILES:
 
  - [index.html(edit this README.md file)](index.html)
+ - [edit-readme.html](edit-readme.html)
  - [voice.html(read the most recent data point of the most recent data set and play a tone at a frequency that maps from 0 to 1023 to 420 Hz to 1666 Hz)](voice.html)
  - [voice.ino(Ardruino program that sense the A0 ADC and sends it down the serial with a newline)](voice.ino)
  - [voice.py(python loop which fetches serial data and saves to json and png files)](voice.py)
