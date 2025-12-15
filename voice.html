@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <!--
+
+-->
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/wAAAAD/AAAAAP8A/wD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAACIAADMwAEQAIgAAAwAARAAAIAADAAQAAAACAAAAQAAAAAAAAAAAAAAQAAAAAAABAREQAAAAAREQEAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAQAAwAgAAAAQAADAAIAAEQAAAMAACIARAAAMzAAIgAAAAADAAAAD/fwAAnjkAAJ95AADvdwAA9+8AAP9/AAC/fQAAD3AAAL99AAD8HwAA//8AAPdvAADvdwAAn3kAAJ45AAD/fwAA" rel="icon" type="image/x-icon">
+
+   <title>VOICE OF THE MUSHROOM</title>    
+   <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+
+<!--
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+   <script>
+    MathJax.Hub.Config({
+        tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processClass: "mathjax",
+        ignoreClass: "no-mathjax"
+        }
+    });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+-->
+
+</script>
+</head>
+<body>
+<div id = "scroll">
+    <a href= "index.html">HOME</a>
+    <h1>VOICE OF THE MUSHROOM</h1>
+    <TABLE>
+        <TR>
+            <TD>TITLE:</TD>
+            <TD>
+                <INPUT id = "title"/>
+            </TD>
+        </TR>
+    </TABLE>
+    <h1>NOTE:</h1>
+    <textarea id = "note"></textarea>
+    <div id = "tonebutton">TONE ON/OFF</div>
+    <TABLE>
+        <TR>
+            <TD>LOW FREQUENCY:</TD>
+            <TD>
+                <INPUT ID = "lowf"/>
+            </TD>
+            <TD>HZ</TD>
+        </TR>
+        <TR>
+            <TD>HIGH FREQUENCY:</TD>
+            <TD>
+                <INPUT ID = "highf"/>
+            </TD>
+            <TD>HZ</TD>
+        </TR>
+    </TABLE>
+    <div id = "datalinkscroll"></div>
+    <div id ="plotscroll"></div>
+</div>
+<script>
+if(innerWidth > innerHeight){
+    squaresize = innerHeight - 20;
+    document.getElementById("scroll").style.width = (innerWidth - squaresize - 60).toString() + "px";
+    
+    document.getElementById("scroll").style.height = (innerHeight - 47).toString() + "px";
+    
+}
+else{
+    squaresize = innerHeight - 10;
+    document.getElementById("scroll").style.width = (innerWidth - 10).toString() + "px";
+    document.getElementById("scroll").style.height = (innerHeight - squaresize -  15).toString() + "px";    
+}
+
+voicedata ={};
+voicedata.voltage = [];
+voicedata.note = "";
+voicedata.datetime = "";
+voicedata.title = "";
+filename = "";
+
+    
+function setup() {
+    createCanvas(squaresize,squaresize);    
+    strokeWeight(1);  
+}
+
+months = [
+"January",
+"February",
+"March",
+"April",
+"May",
+"June",
+"July",
+"August",
+"September",
+"October",
+"November",
+"December"
+];
+
+timeindex = 0;
+function draw(){
+    var httpc = new XMLHttpRequest();
+    httpc.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            voicedata = JSON.parse(this.responseText);
+            clear();
+            background("#9f8767");
+            noFill();
+            strokeWeight(5);
+            stroke(0);
+  //          stroke("#ff2cb4");
+            beginShape();    
+            for(var index = 0;index < voicedata.voltage.length;index++){
+                vertex(map(index,0,666,0,width),map(voicedata.voltage[index],0,1024,height,0));        
+            }
+            endShape();
+//            fill("#ff2cb4");
+            fill(0);
+            circle(map(voicedata.voltage.length - 1,0,666,0,width),map(voicedata.voltage[voicedata.voltage.length - 1],0,1024,height,0),15);
+        }
+    };
+    httpc.open("GET", "load-file.php?filename=voice.json", true);
+    httpc.send();
+
+    timeindex++;
+    if(timeindex > 10000){
+        timeindex = 0;
+    }
+    
+}
+
+
+function keyPressed() {
+  
+//  savejson();
+}
+
+
+
+direction = '';
+function mouseWheel(event) {
+  if (event.delta > 0) {
+    direction = 'mouse wheel down';
+
+  } else {
+    direction = 'mouse wheel up';
+  }  
+}
+
+function mouseClicked() {
+  // Code to run.
+}
+
+function savejson(){
+    
+}
+
+
+</script>
+<style>
+#feedscroll img{
+    max-width:90%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    margin-bottom:1em;
+}
+#scroll{
+    position:absolute;
+    left:5px;
+    top:5px;
+    border:solid;
+    border-width:2px;
+    border-radius:5px;
+    padding:1em 1em 1em 1em;
+    overflow:scroll;
+    background-color:white;
+}
+#temptable{
+    position:absolute;
+    top:150px;
+    right:10px;
+    z-index:1;
+    font-size:3em;
+    font-family:Arial;
+}
+#timedatetable{
+    position:absolute;
+    top:5px;
+    right:10px;
+    z-index:1;
+    font-size:3em;
+    font-family:Arial;
+}
+#rowa{
+    color:blue;
+}
+#rowb{
+    color:red;
+}
+#time{
+    text-align:right;
+}
+body{
+    font-family:Arial;
+    background-color:#9f8767;
+    overflow:hidden;
+}
+input{
+    color:#00ff00;
+    background-color:black;
+    font-family:courier;
+    border-color:#0CCDDF;
+}
+h1{
+    text-align:center;
+}
+.button{
+    border:solid;
+    cursor:pointer;
+    text-align:center;
+}
+.button:hover{
+    background-color:#0CCDDF40;
+}
+.button:active{
+    background-color:#0CCDDFa0;
+}
+
+
+a{
+/*    color:#ff2cb4;*/
+    color:blue;
+}
+.datafilelink{
+    display:block;
+    color:blue;
+}
+.datalink{
+    color:blue;
+    border:solid;
+    border-color:blue;
+    text-align:center;
+    padding:5px 5px 5px 5px;
+    border-radius:5px;
+    margin-top:5px;
+    margin-bottom:5px;
+    cursor:pointer;
+}
+.datalink:hover{
+    background-color:#0000ff60;
+}
+.datalink:active{
+    background-color:#ffffff60;
+}
+main{
+    position:absolute;
+    right:5px;
+    top:5px;
+    border:solid;
+    cursor:pointer;
+    background-color:white;
+    border-radius:5px;
+}
+</style>
+</body>
+</html>
+
+
+    
+    
