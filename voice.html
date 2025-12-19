@@ -39,23 +39,6 @@
     </TABLE>
     <h1>NOTE:</h1>
     <textarea id = "note"></textarea>
-    <div id = "tonebutton">TONE ON/OFF</div>
-    <TABLE>
-        <TR>
-            <TD>LOW FREQUENCY:</TD>
-            <TD>
-                <INPUT ID = "lowf"/>
-            </TD>
-            <TD>HZ</TD>
-        </TR>
-        <TR>
-            <TD>HIGH FREQUENCY:</TD>
-            <TD>
-                <INPUT ID = "highf"/>
-            </TD>
-            <TD>HZ</TD>
-        </TR>
-    </TABLE>
     <div id = "datalinkscroll"></div>
     <div id ="plotscroll"></div>
 </div>
@@ -101,6 +84,8 @@ months = [
 "December"
 ];
 
+vmin = -10000;
+vmax = 10000;
 timeindex = 0;
 function draw(){
     var httpc = new XMLHttpRequest();
@@ -115,12 +100,12 @@ function draw(){
   //          stroke("#ff2cb4");
             beginShape();    
             for(var index = 0;index < voicedata.voltage.length;index++){
-                vertex(map(index,0,666,0,width),map(voicedata.voltage[index],0,1024,height,0));        
+                vertex(map(index,0,666,0,width),map(voicedata.voltage[index],vmin,vmax,height,0));        
             }
             endShape();
 //            fill("#ff2cb4");
             fill(0);
-            circle(map(voicedata.voltage.length - 1,0,666,0,width),map(voicedata.voltage[voicedata.voltage.length - 1],0,1024,height,0),15);
+            circle(map(voicedata.voltage.length - 1,0,666,0,width),map(voicedata.voltage[voicedata.voltage.length - 1],vmin,vmax,height,0),15);
         }
     };
     httpc.open("GET", "load-file.php?filename=voice.json", true);
